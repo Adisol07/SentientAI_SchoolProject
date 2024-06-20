@@ -1,0 +1,71 @@
+using System;
+
+namespace prep;
+
+public class NeuralNetworkOLD
+{
+    private int neuronCount;
+
+    public int[] Layers;
+    public double[] Weights;
+    public double[] Biases;
+    public Random RNG;
+
+    public NeuralNetworkOLD(int[] layers)
+    {
+        Layers = layers;
+        foreach (int n in layers)
+            neuronCount += n;
+        RNG = new Random(1);
+
+        int weightsAndBiasesCount = 0;
+        for (int layer = 0; layer < layers.Length - 1; layer++)
+        {
+            int currentLayer = layers[layer];
+            int nextLayer = layers[layer + 1];
+            weightsAndBiasesCount += currentLayer * nextLayer;
+        }
+        Weights = new double[weightsAndBiasesCount];
+        Biases = new double[weightsAndBiasesCount];
+
+        for (int i = 0; i < weightsAndBiasesCount; i++)
+        {
+            Weights[i] = RNG.NextDouble();
+            Biases[i] = RNG.NextDouble();
+        }
+    }
+
+    public double[] FeedForward(double[] inputs)
+    {
+        double[] neurons = new double[neuronCount];
+        for (int i = 0; i < inputs.Length; i++)
+            neurons[i] = inputs[i];
+
+        double[] result = new double[Layers[Layers.Length - 1]];
+
+        int pastLayerOffset = 0;
+        int pastLayerTempOffset = 0;
+        for (int layer = 0; layer < Layers.Length - 1; layer++)
+        {
+            int currentLayer = Layers[layer];
+            int nextLayer = Layers[layer + 1];
+
+            for (int neuron = 0; neuron < currentLayer; neuron++)
+            {
+                for (int nextNeuron = 0; nextNeuron < nextLayer; nextNeuron++)
+                {
+                    int weightsBiasesIndex = neuron * nextLayer + nextNeuron + pastLayerOffset;
+
+                    neurons[nextNeuron * layer]
+
+                    pastLayerTempOffset++;
+                }
+            }
+
+            pastLayerOffset += pastLayerTempOffset;
+            pastLayerTempOffset = 0;
+        }
+
+        return result;
+    }
+}

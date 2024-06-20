@@ -1,0 +1,5 @@
+.DS_Store
+obj
+.vscode
+network_*.txt
+dictionary_*.json
